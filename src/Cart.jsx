@@ -1,5 +1,5 @@
 import './Cart.css'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {useMutation} from "@tanstack/react-query";
 import {postOrder} from "./api"; // Proveri da li je putanja ./api ili ./api.js (zavisi od editora, ali ./api je ok)
 
@@ -20,6 +20,23 @@ export function Cart({ cartItems, onRemoveFromCart, onClose}) {
     function handleOrder() {
         mutation.mutate({name, address});
     }
+
+    useEffect(() => {
+        function handleEscKey(e) {
+            if (e.key === "Escape") {
+                console.log("ESC - Close the Cart");
+                onClose();
+            }
+        }
+
+        document.addEventListener("keydown", handleEscKey);
+
+        return () => {
+            console.log("Clean event listener");
+            document.removeEventListener("keydown", handleEscKey);
+        }
+
+    }, [onClose])
 
     return (
         <div className="cart-overlay">
