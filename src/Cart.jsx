@@ -1,5 +1,5 @@
 import './Cart.css'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {useMutation} from "@tanstack/react-query";
 import {postOrder} from "./api"; // Proveri da li je putanja ./api ili ./api.js (zavisi od editora, ali ./api je ok)
 
@@ -7,6 +7,14 @@ export function Cart({ cartItems, onRemoveFromCart, onClose}) {
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+
+    const nameInputRef = useRef(null);
+
+    useEffect(() => {
+        if(nameInputRef.current) {
+            nameInputRef.current.focus();
+        }
+    }, [])
 
     const mutation = useMutation({
         mutationFn: postOrder,
@@ -106,7 +114,9 @@ export function Cart({ cartItems, onRemoveFromCart, onClose}) {
                             <h3>Checkout Details</h3>
                             <div style={{marginBottom: '10px'}}>
                                 <label style={{display: 'block', marginBottom: '5px'}}>Full Name:</label>
-                                <input type="text"
+                                <input
+                                       ref={nameInputRef}
+                                       type="text"
                                        value={name}
                                        style={{width: '100%', padding: '8px', boxSizing: 'border-box'}}
                                        placeholder="Enter your name"
