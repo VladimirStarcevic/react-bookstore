@@ -46,6 +46,10 @@ export function Cart({ cartItems, onRemoveFromCart, onClose}) {
 
     }, [onClose])
 
+    const total =  cartItems.reduce((acc, item) => {
+        return acc + item.price;
+    }, 0)
+
     return (
         <div className="cart-overlay">
             <div className="cart-modal">
@@ -132,6 +136,17 @@ export function Cart({ cartItems, onRemoveFromCart, onClose}) {
                                        onChange={e => setAddress(e.target.value)}
                                 />
                             </div>
+                            <div style={{
+                                marginBottom: '10px',
+                                padding: '10px',
+                                background: 'white',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                textAlign: 'right'
+                            }}>
+                                <span style={{color: '#666'}}>Total to pay:</span>
+                                <strong style={{marginLeft: '10px', fontSize: '1.2rem'}}>${total.toFixed(2)}</strong>
+                            </div>
 
                             <button
                                 onClick={handleOrder}
@@ -148,12 +163,6 @@ export function Cart({ cartItems, onRemoveFromCart, onClose}) {
                             >
                                 {mutation.isPending ? 'Processing...' : 'ORDER NOW'}
                             </button>
-                        </div>
-
-                        {/* Total je sada OVDE, unutar "else" bloka.
-                            Znači, kad je uspeh, i on nestaje. */}
-                        <div style={{marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '10px'}}>
-                            <strong>Total: $...</strong>
                         </div>
                     </>
                 )}
